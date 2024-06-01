@@ -21,8 +21,8 @@ struct Student
         }
     }
 
-    Student(string FIO, int number, int gradesArray[5], int scholarship, string passportID)
-        : FIO(FIO.substr(0, 50)), groupNum(number), scholarship(scholarship), passportID(passportID)
+    Student(string FIO, int groupNum, int gradesArray[5], int scholarship, string passportID)
+        : FIO(FIO.substr(0, 50)), groupNum(groupNum), scholarship(scholarship), passportID(passportID)
     {
         for (int i = 0; i < 5; i++)
         {
@@ -78,12 +78,18 @@ public:
         return students;
     }
 
-    void addStudent(Student& student)
+    bool addStudent(Student& student)
     {
+        if (findStudent(student.passportID) != nullptr)
+        {
+            cout << "A student with the same Passport ID already exists in the group. " << endl;
+            return false;
+        }
         students.add(student);
+        return true;
     }
 
-    void removeStudent(string& passportID)
+    void removeStudent(string & passportID)
     {
         for (int i = 0; i < students.count(); i++)
         {
@@ -93,6 +99,11 @@ public:
                 return;
             }
         }
+    }
+
+    void clearStudents()
+    {
+        students.clear();
     }
 
     Student* findStudent(const string& passportID)
@@ -149,8 +160,9 @@ public:
 
     bool updateStudentPassportID(string& passportID, string& newPassportID)
     {
-        if (findStudent(newPassportID))
+        if (findStudent(newPassportID) != nullptr)
         {
+            cout << "A student with the same Paspport ID already exists in the group. " << endl;
             return false;
         }
         Student* student = findStudent(passportID);
@@ -214,7 +226,7 @@ public:
     {
         for (int i = 0; i < students.count(); i++)
         {
-            cout << "FIO: " << students.elementAt(i).FIO << ", Group number: " << students.elementAt(i).groupNum
+            cout << "FIO: " << students.elementAt(i).FIO << ", Group number : " << students.elementAt(i).groupNum
                 << ", Scholarship: " << students.elementAt(i).scholarship << ", PassportID: " << students.elementAt(i).passportID << endl;
             cout << "Grades: ";
             for (int j = 0; j < 5; j++)
@@ -317,8 +329,9 @@ public:
     {
         if (group)
         {
-            delete group;
+            group->clearStudents();
             groupTree.remove(group);
+            delete group;
         }
     }
 
@@ -365,7 +378,8 @@ public:
         {
             if (newGroup->findStudent(passportID))
             {
-                return false; // В новой группе уже есть студент с таким паспортом
+                cout << "A student with the same Passport ID already exists in the group. " << endl;
+                return false; 
             }
             Student* student = currentGroup->findStudent(passportID);
             if (student)
