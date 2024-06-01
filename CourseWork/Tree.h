@@ -9,10 +9,11 @@ private:
 
     struct Node
     {
+        int key;
         T data;
         Node* left;
         Node* right;
-        Node(T data) : data(data), left(nullptr), right(nullptr) {}
+        Node(int key, T data) : key(key), data(data), left(nullptr), right(nullptr) {}
     };
 
     int size;
@@ -70,10 +71,10 @@ public:
         clear();
     }
 
-    void add(T data)
+    void add(int key, T data)
     {
-        if (contains(data)) return;
-        Node* newnode = new Node(data);
+        if (contains(key)) return;
+        Node* newnode = new Node(key, data);
         if (root == nullptr)
         {
             root = newnode;
@@ -83,7 +84,7 @@ public:
             Node* current = root;
             while (true)
             {
-                if (data < current->data)
+                if (key < current->key)
                 {
                     if (current->left == nullptr)
                     {
@@ -106,17 +107,17 @@ public:
         size++;
     }
 
-    void remove(T data)
+    void remove(int key)
     {
         Node* node = root, * prev = nullptr;
         while (node != nullptr)
         {
-            if (node->data == data) break;
+            if (node->key == key) break;
             prev = node;
-            if (data < node->data) node = node->left;
+            if (key < node->key) node = node->left;
             else node = node->right;
         }
-        if (node != nullptr && node->data == data)
+        if (node != nullptr && node->key == key)
         {
             if (node == root) root = deleteByMerging(root);
             else if (prev->left == node) prev->left = deleteByMerging(prev->left);
@@ -124,13 +125,13 @@ public:
         }
     }
 
-    bool contains(T data)
+    bool contains(int key)
     {
         Node* current = root;
         while (current != nullptr)
         {
-            if (current->data == data) return true;
-            if (data < current->data) current = current->left;
+            if (current->key == key) return true;
+            if (key < current->key) current = current->left;
             else current = current->right;
         }
         return false;

@@ -305,11 +305,11 @@ public:
     {
         auto* root = groupTree.getRoot();
         while (root != nullptr) {
-            if (groupNum == root->data->getGroupNum())
+            if (groupNum == root->key)
             {
                 return root->data;
             }
-            else if (groupNum < root->data->getGroupNum())
+            else if (groupNum < root->key)
             {
                 root = root->left;
             }
@@ -322,7 +322,7 @@ public:
 
     void addGroup(int groupNum)
     {
-        groupTree.add(new Group(groupNum));
+        groupTree.add(groupNum, new Group(groupNum));
     }
 
     void removeGroup(Group* group)
@@ -330,7 +330,7 @@ public:
         if (group)
         {
             group->clearStudents();
-            groupTree.remove(group);
+            groupTree.remove(group->getGroupNum());
             delete group;
         }
     }
@@ -346,7 +346,7 @@ public:
         {
             Group* newGroup = new Group(groupNum);
             newGroup->addStudent(student);
-            groupTree.add(newGroup);
+            groupTree.add(groupNum, newGroup);
         }
     }
 
@@ -408,7 +408,7 @@ public:
 
                 newGroup->addStudent(newStudent);
                 currentGroup->removeStudent(passportID);
-                groupTree.add(newGroup);
+                groupTree.add(newGroupNum,newGroup);
                 return true;
             }
         }
@@ -510,7 +510,7 @@ public:
                 if (currentGroup == nullptr)
                 {
                     currentGroup = new Group(groupNum);
-                    groupTree.add(currentGroup);
+                    groupTree.add(groupNum, currentGroup);
                 }
             }
             else if (currentGroup != nullptr)
