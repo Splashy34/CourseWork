@@ -442,6 +442,7 @@ public:
         {
             if (group->findStudent(newPassportID) != nullptr)
             {
+                cout << "A student with the same Passport ID already exists in the group. " << endl;
                 return false;
             }
             Student* student = group->findStudent(passportID);
