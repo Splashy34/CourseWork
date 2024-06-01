@@ -440,7 +440,16 @@ public:
         Group* group = findGroup(groupNum);
         if (group)
         {
-            return group->updateStudentPassportID(passportID, newPassportID);
+            if (group->findStudent(newPassportID) != nullptr)
+            {
+                return false;
+            }
+            Student* student = group->findStudent(passportID);
+            if (student)
+            {
+                student->setPassportID(newPassportID);
+                return true;
+            }
         }
         return false;
     }
